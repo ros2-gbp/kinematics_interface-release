@@ -2,6 +2,9 @@
 Changelog for package kinematics_interface
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.0.2 (2022-10-21)
+------------------
+
 0.0.1 (2022-10-11)
 ------------------
 * Make formatting of comments unified and nice. (`#11 <https://github.com/ros-controls/kinematics_interface/issues/11>`_)
