@@ -2,6 +2,11 @@
 Changelog for package kinematics_interface_kdl
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.1.0 (2023-01-27)
+------------------
+* Fix overriding of install (`#13 <https://github.com/ros-controls/kinematics_interface/issues/13>`_)
+* Contributors: Tyler Weaver
+
 0.0.2 (2022-10-21)
 ------------------
 
