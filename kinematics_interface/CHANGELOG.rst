@@ -2,6 +2,9 @@
 Changelog for package kinematics_interface
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.2.0 (2023-11-16)
+------------------
+
 0.1.0 (2023-01-27)
 ------------------
 * Fix overriding of install (`#13 <https://github.com/ros-controls/kinematics_interface/issues/13>`_)
