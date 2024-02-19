@@ -2,10 +2,13 @@
 Changelog for package kinematics_interface
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-1.0.0 (2023-11-16)
+0.3.0 (2024-02-19)
 ------------------
-* Use a dynamic library instead of header-only (`#21 <https://github.com/ros-controls/kinematics_interface/issues/21>`_)
-* Contributors: Thibault Poignonec
+* Move definition logger to cpp to avoid "multiple definition" linker error (backport `#21 <https://github.com/ros-controls/kinematics_interface/issues/21>`_) (`#32 <https://github.com/ros-controls/kinematics_interface/issues/32>`_)
+* Contributors: mergify[bot]
+
+0.2.0 (2023-11-16)
+------------------
 
 0.1.0 (2023-01-27)
 ------------------
