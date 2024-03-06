@@ -1,0 +1,12 @@
+Source: ros-rolling-kinematics-interface-kdl
+Section: misc
+Priority: optional
+Maintainer: Bence Magyar <bence.magyar.robotics@gmail.com>
+Build-Depends: debhelper (>= 9.0.0), ament-cmake, ament-cmake-googletest <!nocheck>, libeigen3-dev, libkdl-parser-dev, pluginlib-dev, ros-rolling-eigen3-cmake-module, ros-rolling-kinematics-interface, ros-rolling-ros2-control-test-assets <!nocheck>, ros-rolling-tf2-eigen-kdl, ros-rolling-ros-workspace
+Homepage: 
+Standards-Version: 3.9.2
+
+Package: ros-rolling-kinematics-interface-kdl
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libeigen3-dev, libkdl-parser-dev, pluginlib-dev, ros-rolling-kinematics-interface, ros-rolling-tf2-eigen-kdl, ros-rolling-ros-workspace
+Description: KDL implementation of ros2_control kinematics interface
