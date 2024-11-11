@@ -2,6 +2,9 @@
 Changelog for package kinematics_interface
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.2.1 (2024-11-11)
+------------------
+
 1.2.0 (2024-11-05)
 ------------------
 * API changes to support robot description (`#83 <https://github.com/ros-controls/kinematics_interface/issues/83>`_)
