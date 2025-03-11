@@ -2,6 +2,17 @@
 Changelog for package kinematics_interface_kdl
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.0.0 (2025-03-11)
+------------------
+* Add methods for computing frame differences (`#93 <https://github.com/ros-controls/kinematics_interface/issues/93>`_)
+* Contributors: francesco-donofrio
+
+1.3.0 (2025-03-11)
+------------------
+* Remove visibility boilerplate code (`#101 <https://github.com/ros-controls/kinematics_interface/issues/101>`_)
+* Calculate Jacobian Inverse (`#92 <https://github.com/ros-controls/kinematics_interface/issues/92>`_)
+* Contributors: Christoph Fröhlich, francesco-donofrio
+
 1.2.1 (2024-11-11)
 ------------------
 * Remove ns from robot_description parameter (`#91 <https://github.com/ros-controls/kinematics_interface/issues/91>`_)
