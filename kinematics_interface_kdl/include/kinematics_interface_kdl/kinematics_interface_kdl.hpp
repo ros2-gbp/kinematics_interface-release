@@ -40,9 +40,8 @@ class KinematicsInterfaceKDL : public kinematics_interface::KinematicsInterface
 {
 public:
   bool initialize(
-    const std::string & robot_description,
     std::shared_ptr<rclcpp::node_interfaces::NodeParametersInterface> parameters_interface,
-    const std::string & param_namespace) override;
+    const std::string & end_effector_name) override;
 
   bool convert_cartesian_deltas_to_joint_deltas(
     const Eigen::VectorXd & joint_pos, const Eigen::Matrix<double, 6, 1> & delta_x,
@@ -60,17 +59,12 @@ public:
     const Eigen::VectorXd & joint_pos, const std::string & link_name,
     Eigen::Matrix<double, 6, Eigen::Dynamic> & jacobian) override;
 
-  bool calculate_jacobian_inverse(
-    const Eigen::VectorXd & joint_pos, const std::string & link_name,
-    Eigen::Matrix<double, Eigen::Dynamic, 6> & jacobian_inverse) override;
-
 private:
   // verification methods
   bool verify_initialized();
   bool verify_link_name(const std::string & link_name);
   bool verify_joint_vector(const Eigen::VectorXd & joint_vector);
   bool verify_jacobian(const Eigen::Matrix<double, 6, Eigen::Dynamic> & jacobian);
-  bool verify_jacobian_inverse(const Eigen::Matrix<double, Eigen::Dynamic, 6> & jacobian);
 
   bool initialized = false;
   std::string root_name_;
@@ -80,7 +74,6 @@ private:
   KDL::JntArray q_;
   KDL::Frame frame_;
   std::shared_ptr<KDL::Jacobian> jacobian_;
-  std::shared_ptr<Eigen::Matrix<double, Eigen::Dynamic, 6>> jacobian_inverse_;
   std::shared_ptr<KDL::ChainJntToJacSolver> jac_solver_;
   std::shared_ptr<rclcpp::node_interfaces::NodeParametersInterface> parameters_interface_;
   std::unordered_map<std::string, int> link_name_map_;

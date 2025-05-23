@@ -21,69 +21,31 @@ namespace kinematics_interface_kdl
 rclcpp::Logger LOGGER = rclcpp::get_logger("kinematics_interface_kdl");
 
 bool KinematicsInterfaceKDL::initialize(
-  const std::string & robot_description,
   std::shared_ptr<rclcpp::node_interfaces::NodeParametersInterface> parameters_interface,
-  const std::string & param_namespace)
+  const std::string & end_effector_name)
 {
   // track initialization plugin
   initialized = true;
 
-  // get parameters
-  std::string ns = !param_namespace.empty() ? param_namespace + "." : "";
-
-  std::string robot_description_local;
-  if (robot_description.empty())
+  // get robot description
+  auto robot_param = rclcpp::Parameter();
+  if (!parameters_interface->get_parameter("robot_description", robot_param))
   {
-    // If the robot_description input argument is empty, try to get the
-    // robot_description from the node's parameters.
-    auto robot_param = rclcpp::Parameter();
-    if (!parameters_interface->get_parameter("robot_description", robot_param))
-    {
-      RCLCPP_ERROR(LOGGER, "parameter robot_description not set in kinematics_interface_kdl");
-      return false;
-    }
-    robot_description_local = robot_param.as_string();
-  }
-  else
-  {
-    robot_description_local = robot_description;
-  }
-
-  // get alpha damping term
-  auto alpha_param = rclcpp::Parameter("alpha", 0.000005);
-  if (parameters_interface->has_parameter(ns + "alpha"))
-  {
-    parameters_interface->get_parameter(ns + "alpha", alpha_param);
-  }
-  alpha = alpha_param.as_double();
-  // get end-effector name
-  auto end_effector_name_param = rclcpp::Parameter("tip");
-  if (parameters_interface->has_parameter(ns + "tip"))
-  {
-    parameters_interface->get_parameter(ns + "tip", end_effector_name_param);
-  }
-  else
-  {
-    RCLCPP_ERROR(LOGGER, "Failed to find end effector name parameter [tip].");
+    RCLCPP_ERROR(LOGGER, "parameter robot_description not set");
     return false;
   }
-  std::string end_effector_name = end_effector_name_param.as_string();
-
+  auto robot_description = robot_param.as_string();
+  // get alpha damping term
+  auto alpha_param = rclcpp::Parameter("alpha", 0.000005);
+  if (parameters_interface->has_parameter("alpha"))
+  {
+    parameters_interface->get_parameter("alpha", alpha_param);
+  }
+  alpha = alpha_param.as_double();
   // create kinematic chain
   KDL::Tree robot_tree;
-  kdl_parser::treeFromString(robot_description_local, robot_tree);
-  // get root name
-  auto base_param = rclcpp::Parameter();
-  if (parameters_interface->has_parameter(ns + "base"))
-  {
-    parameters_interface->get_parameter(ns + "base", base_param);
-    root_name_ = base_param.as_string();
-  }
-  else
-  {
-    root_name_ = robot_tree.getRootSegment()->first;
-  }
-
+  kdl_parser::treeFromString(robot_description, robot_tree);
+  root_name_ = robot_tree.getRootSegment()->first;
   if (!robot_tree.getChain(root_name_, end_effector_name, chain_))
   {
     RCLCPP_ERROR(
@@ -94,19 +56,17 @@ bool KinematicsInterfaceKDL::initialize(
   // create map from link names to their index
   for (size_t i = 0; i < chain_.getNrOfSegments(); ++i)
   {
-    link_name_map_[chain_.getSegment(static_cast<unsigned int>(i)).getName()] =
-      static_cast<int>(i) + 1;
+    link_name_map_[chain_.getSegment(i).getName()] = i + 1;
   }
   // allocate dynamics memory
   num_joints_ = chain_.getNrOfJoints();
-  q_ = KDL::JntArray(static_cast<unsigned int>(num_joints_));
+  q_ = KDL::JntArray(num_joints_);
   I = Eigen::MatrixXd(num_joints_, num_joints_);
   I.setIdentity();
   // create KDL solvers
   fk_pos_solver_ = std::make_shared<KDL::ChainFkSolverPos_recursive>(chain_);
   jac_solver_ = std::make_shared<KDL::ChainJntToJacSolver>(chain_);
   jacobian_ = std::make_shared<KDL::Jacobian>(num_joints_);
-  jacobian_inverse_ = std::make_shared<Eigen::Matrix<double, Eigen::Dynamic, 6>>(num_joints_, 6);
 
   return true;
 }
@@ -147,13 +107,17 @@ bool KinematicsInterfaceKDL::convert_cartesian_deltas_to_joint_deltas(
     return false;
   }
 
-  // calculate Jacobian inverse
-  if (!calculate_jacobian_inverse(joint_pos, link_name, *jacobian_inverse_))
-  {
-    return false;
-  }
+  // get joint array
+  q_.data = joint_pos;
 
-  delta_theta = *jacobian_inverse_ * delta_x;
+  // calculate Jacobian
+  jac_solver_->JntToJac(q_, *jacobian_, link_name_map_[link_name]);
+  // TODO(anyone): this dynamic allocation needs to be replaced
+  Eigen::Matrix<double, 6, Eigen::Dynamic> J = jacobian_->data;
+  // damped inverse
+  Eigen::Matrix<double, Eigen::Dynamic, 6> J_inverse =
+    (J.transpose() * J + alpha * I).inverse() * J.transpose();
+  delta_theta = J_inverse * delta_x;
 
   return true;
 }
@@ -176,34 +140,6 @@ bool KinematicsInterfaceKDL::calculate_jacobian(
   // calculate Jacobian
   jac_solver_->JntToJac(q_, *jacobian_, link_name_map_[link_name]);
   jacobian = jacobian_->data;
-
-  return true;
-}
-
-bool KinematicsInterfaceKDL::calculate_jacobian_inverse(
-  const Eigen::Matrix<double, Eigen::Dynamic, 1> & joint_pos, const std::string & link_name,
-  Eigen::Matrix<double, Eigen::Dynamic, 6> & jacobian_inverse)
-{
-  // verify inputs
-  if (
-    !verify_initialized() || !verify_joint_vector(joint_pos) || !verify_link_name(link_name) ||
-    !verify_jacobian_inverse(jacobian_inverse))
-  {
-    return false;
-  }
-
-  // get joint array
-  q_.data = joint_pos;
-
-  // calculate Jacobian
-  jac_solver_->JntToJac(q_, *jacobian_, link_name_map_[link_name]);
-  Eigen::Matrix<double, 6, Eigen::Dynamic> jacobian = jacobian_->data;
-
-  // damped inverse
-  *jacobian_inverse_ =
-    (jacobian.transpose() * jacobian + alpha * I).inverse() * jacobian.transpose();
-
-  jacobian_inverse = *jacobian_inverse_;
 
   return true;
 }
@@ -245,7 +181,7 @@ bool KinematicsInterfaceKDL::verify_link_name(const std::string & link_name)
   if (link_name_map_.find(link_name) == link_name_map_.end())
   {
     std::string links;
-    for (unsigned int i = 0; i < static_cast<unsigned int>(chain_.getNrOfSegments()); ++i)
+    for (size_t i = 0; i < chain_.getNrOfSegments(); ++i)
     {
       links += "\n" + chain_.getSegment(i).getName();
     }
@@ -290,20 +226,6 @@ bool KinematicsInterfaceKDL::verify_jacobian(
     RCLCPP_ERROR(
       LOGGER, "The size of the jacobian (%zu, %zu) does not match the required size of (%u, %u)",
       jacobian.rows(), jacobian.cols(), jacobian_->rows(), jacobian_->columns());
-    return false;
-  }
-  return true;
-}
-
-bool KinematicsInterfaceKDL::verify_jacobian_inverse(
-  const Eigen::Matrix<double, Eigen::Dynamic, 6> & jacobian_inverse)
-{
-  if (
-    jacobian_inverse.rows() != jacobian_->columns() || jacobian_inverse.cols() != jacobian_->rows())
-  {
-    RCLCPP_ERROR(
-      LOGGER, "The size of the jacobian (%zu, %zu) does not match the required size of (%u, %u)",
-      jacobian_inverse.rows(), jacobian_inverse.cols(), jacobian_->columns(), jacobian_->rows());
     return false;
   }
   return true;

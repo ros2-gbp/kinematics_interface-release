@@ -28,8 +28,6 @@ public:
   std::shared_ptr<kinematics_interface::KinematicsInterface> ik_;
   std::shared_ptr<rclcpp_lifecycle::LifecycleNode> node_;
   std::string end_effector_ = "link2";
-  std::string urdf_ = std::string(ros2_control_test_assets::urdf_head) +
-                      std::string(ros2_control_test_assets::urdf_tail);
 
   void SetUp()
   {
@@ -52,7 +50,9 @@ public:
 
   void loadURDFParameter()
   {
-    rclcpp::Parameter param("robot_description", urdf_);
+    auto urdf = std::string(ros2_control_test_assets::urdf_head) +
+                std::string(ros2_control_test_assets::urdf_tail);
+    rclcpp::Parameter param("robot_description", urdf);
     node_->declare_parameter("robot_description", "");
     node_->set_parameter(param);
   }
@@ -63,17 +63,6 @@ public:
     node_->declare_parameter("alpha", 0.005);
     node_->set_parameter(param);
   }
-
-  /**
-   * \brief Used for testing initialization from parameters.
-   * Elsewhere, `end_effector_` member is used.
-  */
-  void loadTipParameter()
-  {
-    rclcpp::Parameter param("tip", "link2");
-    node_->declare_parameter("tip", "link2");
-    node_->set_parameter(param);
-  }
 };
 
 TEST_F(TestKDLPlugin, KDL_plugin_function)
@@ -81,10 +70,9 @@ TEST_F(TestKDLPlugin, KDL_plugin_function)
   // load robot description and alpha to parameter server
   loadURDFParameter();
   loadAlphaParameter();
-  loadTipParameter();
 
   // initialize the  plugin
-  ASSERT_TRUE(ik_->initialize(urdf_, node_->get_node_parameters_interface(), ""));
+  ASSERT_TRUE(ik_->initialize(node_->get_node_parameters_interface(), end_effector_));
 
   // calculate end effector transform
   Eigen::Matrix<double, Eigen::Dynamic, 1> pos = Eigen::Matrix<double, 2, 1>::Zero();
@@ -104,29 +92,9 @@ TEST_F(TestKDLPlugin, KDL_plugin_function)
     ik_->convert_joint_deltas_to_cartesian_deltas(pos, delta_theta, end_effector_, delta_x_est));
 
   // Ensure kinematics math is correct
-  for (Eigen::Index i = 0; i < delta_x.size(); ++i)
+  for (size_t i = 0; i < static_cast<size_t>(delta_x.size()); ++i)
   {
     ASSERT_NEAR(delta_x[i], delta_x_est[i], 0.02);
-  }
-
-  // calculate jacobian
-  Eigen::Matrix<double, 6, Eigen::Dynamic> jacobian = Eigen::Matrix<double, 6, 2>::Zero();
-  ASSERT_TRUE(ik_->calculate_jacobian(pos, end_effector_, jacobian));
-
-  // calculate jacobian inverse
-  Eigen::Matrix<double, Eigen::Dynamic, 6> jacobian_inverse =
-    jacobian.completeOrthogonalDecomposition().pseudoInverse();
-  Eigen::Matrix<double, Eigen::Dynamic, 6> jacobian_inverse_est =
-    Eigen::Matrix<double, 2, 6>::Zero();
-  ASSERT_TRUE(ik_->calculate_jacobian_inverse(pos, end_effector_, jacobian_inverse_est));
-
-  // ensure jacobian inverse math is correct
-  for (Eigen::Index i = 0; i < jacobian_inverse.rows(); ++i)
-  {
-    for (Eigen::Index j = 0; j < jacobian_inverse.cols(); ++j)
-    {
-      ASSERT_NEAR(jacobian_inverse(i, j), jacobian_inverse_est(i, j), 0.02);
-    }
   }
 }
 
@@ -135,10 +103,9 @@ TEST_F(TestKDLPlugin, KDL_plugin_function_std_vector)
   // load robot description and alpha to parameter server
   loadURDFParameter();
   loadAlphaParameter();
-  loadTipParameter();
 
   // initialize the  plugin
-  ASSERT_TRUE(ik_->initialize(urdf_, node_->get_node_parameters_interface(), ""));
+  ASSERT_TRUE(ik_->initialize(node_->get_node_parameters_interface(), end_effector_));
 
   // calculate end effector transform
   std::vector<double> pos = {0, 0};
@@ -162,26 +129,6 @@ TEST_F(TestKDLPlugin, KDL_plugin_function_std_vector)
   {
     ASSERT_NEAR(delta_x[i], delta_x_est[i], 0.02);
   }
-
-  // calculate jacobian
-  Eigen::Matrix<double, 6, Eigen::Dynamic> jacobian = Eigen::Matrix<double, 6, 2>::Zero();
-  ASSERT_TRUE(ik_->calculate_jacobian(pos, end_effector_, jacobian));
-
-  // calculate jacobian inverse
-  Eigen::Matrix<double, Eigen::Dynamic, 6> jacobian_inverse =
-    jacobian.completeOrthogonalDecomposition().pseudoInverse();
-  Eigen::Matrix<double, Eigen::Dynamic, 6> jacobian_inverse_est =
-    Eigen::Matrix<double, 2, 6>::Zero();
-  ASSERT_TRUE(ik_->calculate_jacobian_inverse(pos, end_effector_, jacobian_inverse_est));
-
-  // ensure jacobian inverse math is correct
-  for (Eigen::Index i = 0; i < jacobian_inverse.rows(); ++i)
-  {
-    for (Eigen::Index j = 0; j < jacobian_inverse.cols(); ++j)
-    {
-      ASSERT_NEAR(jacobian_inverse(i, j), jacobian_inverse_est(i, j), 0.02);
-    }
-  }
 }
 
 TEST_F(TestKDLPlugin, incorrect_input_sizes)
@@ -189,10 +136,9 @@ TEST_F(TestKDLPlugin, incorrect_input_sizes)
   // load robot description and alpha to parameter server
   loadURDFParameter();
   loadAlphaParameter();
-  loadTipParameter();
 
   // initialize the  plugin
-  ASSERT_TRUE(ik_->initialize(urdf_, node_->get_node_parameters_interface(), ""));
+  ASSERT_TRUE(ik_->initialize(node_->get_node_parameters_interface(), end_effector_));
 
   // define correct values
   Eigen::Matrix<double, Eigen::Dynamic, 1> pos = Eigen::Matrix<double, 2, 1>::Zero();
@@ -201,13 +147,9 @@ TEST_F(TestKDLPlugin, incorrect_input_sizes)
   delta_x[2] = 1;
   Eigen::Matrix<double, Eigen::Dynamic, 1> delta_theta = Eigen::Matrix<double, 2, 1>::Zero();
   Eigen::Matrix<double, 6, 1> delta_x_est;
-  Eigen::Matrix<double, Eigen::Dynamic, 6> jacobian = Eigen::Matrix<double, 2, 6>::Zero();
 
   // wrong size input vector
   Eigen::Matrix<double, Eigen::Dynamic, 1> vec_5 = Eigen::Matrix<double, 5, 1>::Zero();
-
-  // wrong size input jacobian
-  Eigen::Matrix<double, Eigen::Dynamic, 6> mat_5_6 = Eigen::Matrix<double, 5, 6>::Zero();
 
   // calculate transform
   ASSERT_FALSE(ik_->calculate_link_transform(vec_5, end_effector_, end_effector_transform));
@@ -227,22 +169,11 @@ TEST_F(TestKDLPlugin, incorrect_input_sizes)
     ik_->convert_joint_deltas_to_cartesian_deltas(pos, vec_5, end_effector_, delta_x_est));
   ASSERT_FALSE(ik_->convert_joint_deltas_to_cartesian_deltas(
     pos, delta_theta, "link_not_in_model", delta_x_est));
-
-  // calculate jacobian inverse
-  ASSERT_FALSE(ik_->calculate_jacobian_inverse(vec_5, end_effector_, jacobian));
-  ASSERT_FALSE(ik_->calculate_jacobian_inverse(pos, end_effector_, mat_5_6));
-  ASSERT_FALSE(ik_->calculate_jacobian_inverse(pos, "link_not_in_model", jacobian));
 }
 
 TEST_F(TestKDLPlugin, KDL_plugin_no_robot_description)
 {
   // load alpha to parameter server
   loadAlphaParameter();
-  loadTipParameter();
-  ASSERT_FALSE(ik_->initialize("", node_->get_node_parameters_interface(), ""));
-}
-
-TEST_F(TestKDLPlugin, KDL_plugin_no_parameter_tip)
-{
-  ASSERT_FALSE(ik_->initialize(urdf_, node_->get_node_parameters_interface(), ""));
+  ASSERT_FALSE(ik_->initialize(node_->get_node_parameters_interface(), end_effector_));
 }
