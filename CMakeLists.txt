@@ -28,10 +28,6 @@ target_link_libraries(kinematics_interface PUBLIC
   Eigen3::Eigen rclcpp::rclcpp rclcpp_lifecycle::rclcpp_lifecycle
 )
 
-# Causes the visibility macros to use dllexport rather than dllimport,
-# which is appropriate when building the dll but not consuming it.
-target_compile_definitions(kinematics_interface PUBLIC "KINEMATICS_INTERFACE_BUILDING_DLL")
-
 install(
   DIRECTORY include/
   DESTINATION include/kinematics_interface
@@ -45,5 +41,5 @@ install(
 )
 
 ament_export_targets(export_kinematics_interface HAS_LIBRARY_TARGET)
-ament_export_dependencies(${THIS_PACKAGE_INCLUDE_DEPENDS})
+ament_export_dependencies(${THIS_PACKAGE_INCLUDE_DEPENDS} Eigen3)
 ament_package()
