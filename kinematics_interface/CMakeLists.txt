@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.16)
 project(kinematics_interface LANGUAGES CXX)
 
-find_package(ros2_control_cmake REQUIRED)
-set_compiler_options()
-export_windows_symbols()
+if(CMAKE_CXX_COMPILER_ID MATCHES "(GNU|Clang)")
+  add_compile_options(-Wall -Wextra -Wpedantic)
+endif()
 
 set(THIS_PACKAGE_INCLUDE_DEPENDS
   rclcpp
@@ -12,7 +12,6 @@ set(THIS_PACKAGE_INCLUDE_DEPENDS
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-find_package(backward_ros REQUIRED)
 foreach(Dependency IN ITEMS ${THIS_PACKAGE_INCLUDE_DEPENDS})
   find_package(${Dependency} REQUIRED)
 endforeach()
@@ -26,8 +25,15 @@ target_include_directories(kinematics_interface PUBLIC
   $<INSTALL_INTERFACE:include/kinematics_interface>
 )
 target_link_libraries(kinematics_interface PUBLIC
-  Eigen3::Eigen rclcpp::rclcpp rclcpp_lifecycle::rclcpp_lifecycle
+  Eigen3::Eigen
 )
+ament_target_dependencies(kinematics_interface PUBLIC
+  ${THIS_PACKAGE_INCLUDE_DEPENDS}
+)
+
+# Causes the visibility macros to use dllexport rather than dllimport,
+# which is appropriate when building the dll but not consuming it.
+target_compile_definitions(kinematics_interface PUBLIC "KINEMATICS_INTERFACE_BUILDING_DLL")
 
 install(
   DIRECTORY include/
@@ -42,5 +48,5 @@ install(
 )
 
 ament_export_targets(export_kinematics_interface HAS_LIBRARY_TARGET)
-ament_export_dependencies(${THIS_PACKAGE_INCLUDE_DEPENDS} Eigen3)
+ament_export_dependencies(${THIS_PACKAGE_INCLUDE_DEPENDS})
 ament_package()

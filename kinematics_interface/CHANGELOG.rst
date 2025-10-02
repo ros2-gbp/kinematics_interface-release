@@ -2,46 +2,23 @@
 Changelog for package kinematics_interface
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-1.6.0 (2025-10-02)
+0.4.1 (2025-10-02)
 ------------------
-* Add backward_ros (backport `#190 <https://github.com/ros-controls/kinematics_interface/issues/190>`_) (`#193 <https://github.com/ros-controls/kinematics_interface/issues/193>`_)
+* Add windows CI workflow (backport `#153 <https://github.com/ros-controls/kinematics_interface/issues/153>`_) (`#157 <https://github.com/ros-controls/kinematics_interface/issues/157>`_)
 * Contributors: mergify[bot]
 
-1.5.0 (2025-08-27)
+0.4.0 (2025-05-23)
 ------------------
-* Remove remnant of visibility control (backport `#170 <https://github.com/ros-controls/kinematics_interface/issues/170>`_) (`#171 <https://github.com/ros-controls/kinematics_interface/issues/171>`_)
-* Pass Eigen3 to ament_export_dependencies (backport `#165 <https://github.com/ros-controls/kinematics_interface/issues/165>`_) (`#166 <https://github.com/ros-controls/kinematics_interface/issues/166>`_)
-* Contributors: Silvio Traversaro
-
-1.4.0 (2025-05-23)
-------------------
-* [kilted] Update deprecated call to ament_target_dependencies (backport `#138 <https://github.com/ros-controls/kinematics_interface/issues/138>`_) (`#142 <https://github.com/ros-controls/kinematics_interface/issues/142>`_)
-* Use ros2_control_cmake (backport `#118 <https://github.com/ros-controls/kinematics_interface/issues/118>`_) (`#119 <https://github.com/ros-controls/kinematics_interface/issues/119>`_)
+* Use CMake targets for eigen (backport `#50 <https://github.com/ros-controls/kinematics_interface/issues/50>`_) (`#55 <https://github.com/ros-controls/kinematics_interface/issues/55>`_)
 * Contributors: mergify[bot]
 
-1.3.0 (2025-03-11)
+0.3.0 (2024-02-19)
 ------------------
-* Remove visibility boilerplate code (`#101 <https://github.com/ros-controls/kinematics_interface/issues/101>`_)
-* Calculate Jacobian Inverse (`#92 <https://github.com/ros-controls/kinematics_interface/issues/92>`_)
-* Contributors: Christoph Fröhlich, francesco-donofrio
+* Move definition logger to cpp to avoid "multiple definition" linker error (backport `#21 <https://github.com/ros-controls/kinematics_interface/issues/21>`_) (`#32 <https://github.com/ros-controls/kinematics_interface/issues/32>`_)
+* Contributors: mergify[bot]
 
-1.2.1 (2024-11-11)
+0.2.0 (2023-11-16)
 ------------------
-
-1.2.0 (2024-11-05)
-------------------
-* API changes to support robot description (`#83 <https://github.com/ros-controls/kinematics_interface/issues/83>`_)
-* Contributors: Dr. Denis
-
-1.1.0 (2024-05-20)
-------------------
-* Use CMake targets for eigen (`#50 <https://github.com/ros-controls/kinematics_interface/issues/50>`_)
-* Contributors: Christoph Fröhlich
-
-1.0.0 (2023-11-16)
-------------------
-* Use a dynamic library instead of header-only (`#21 <https://github.com/ros-controls/kinematics_interface/issues/21>`_)
-* Contributors: Thibault Poignonec
 
 0.1.0 (2023-01-27)
 ------------------

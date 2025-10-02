@@ -40,15 +40,10 @@ public:
 
   /**
    * \brief Initialize plugin. This method must be called before any other.
-   * \param[in] robot_description robot URDF in string format
-   * \param[in] parameters_interface
-   * \param[in] param_namespace namespace for kinematics parameters - defaults to "kinematics"
-   * \return true if successful
    */
   virtual bool initialize(
-    const std::string & robot_description,
     std::shared_ptr<rclcpp::node_interfaces::NodeParametersInterface> parameters_interface,
-    const std::string & param_namespace) = 0;
+    const std::string & end_effector_name) = 0;
 
   /**
    * \brief Convert Cartesian delta-x to joint delta-theta, using the Jacobian.
@@ -96,17 +91,6 @@ public:
     const Eigen::VectorXd & joint_pos, const std::string & link_name,
     Eigen::Matrix<double, 6, Eigen::Dynamic> & jacobian) = 0;
 
-  /**
-   * \brief Calculates the jacobian inverse for a specified link using provided joint positions.
-   * \param[in] joint_pos joint positions of the robot in radians
-   * \param[in] link_name the name of the link to find the transform for
-   * \param[out] jacobian_inverse Jacobian inverse matrix of the specified link in row major format.
-   * \return true if successful
-   */
-  virtual bool calculate_jacobian_inverse(
-    const Eigen::VectorXd & joint_pos, const std::string & link_name,
-    Eigen::Matrix<double, Eigen::Dynamic, 6> & jacobian_inverse) = 0;
-
   bool convert_cartesian_deltas_to_joint_deltas(
     std::vector<double> & joint_pos_vec, const std::vector<double> & delta_x_vec,
     const std::string & link_name, std::vector<double> & delta_theta_vec);
@@ -122,10 +106,6 @@ public:
   bool calculate_jacobian(
     const std::vector<double> & joint_pos_vec, const std::string & link_name,
     Eigen::Matrix<double, 6, Eigen::Dynamic> & jacobian);
-
-  bool calculate_jacobian_inverse(
-    const std::vector<double> & joint_pos_vec, const std::string & link_name,
-    Eigen::Matrix<double, Eigen::Dynamic, 6> & jacobian_inverse);
 };
 
 }  // namespace kinematics_interface
