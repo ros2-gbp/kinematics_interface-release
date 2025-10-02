@@ -4,14 +4,19 @@ on:
   push:
     branches:
       - humble
+  pull_request:
+    branches:
+      - humble
+    paths:
+      - .github/workflows/humble-source-build.yml
   schedule:
     # Run every day to detect flakiness and broken dependencies
     - cron: '03 3 * * MON-FRI'
 
 concurrency:
-  # cancel previous runs of the same workflow, except for pushes on humble branch
+  # cancel previous runs of the same workflow, except for pushes on given branches
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: ${{ !startsWith(github.ref, '/refs/heads') }}
+  cancel-in-progress: ${{ !startsWith(github.ref, 'refs/heads') }}
 
 jobs:
   source:
@@ -19,4 +24,4 @@ jobs:
     with:
       ros_distro: humble
       ref: humble
-      os_name: ubuntu-22.04
+      container: ubuntu:22.04
