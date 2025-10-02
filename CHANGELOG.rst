@@ -2,6 +2,11 @@
 Changelog for package kinematics_interface_kdl
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.3.0 (2025-10-02)
+------------------
+* Add backward_ros (`#190 <https://github.com/ros-controls/kinematics_interface/issues/190>`_)
+* Contributors: Christoph Fröhlich
+
 2.2.0 (2025-08-27)
 ------------------
 * Pass Eigen3 to ament_export_dependencies (`#165 <https://github.com/ros-controls/kinematics_interface/issues/165>`_)
