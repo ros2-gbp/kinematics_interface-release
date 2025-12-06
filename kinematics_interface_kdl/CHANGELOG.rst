@@ -2,18 +2,57 @@
 Changelog for package kinematics_interface_kdl
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-0.4.1 (2025-10-02)
+2.4.0 (2025-12-06)
 ------------------
+* Add a test template for plugin implementations (`#211 <https://github.com/ros-controls/kinematics_interface/issues/211>`_)
+* Refactor and extend tests (`#210 <https://github.com/ros-controls/kinematics_interface/issues/210>`_)
+* Update maintainers (`#198 <https://github.com/ros-controls/kinematics_interface/issues/198>`_)
+* Contributors: Christoph Fröhlich
 
-0.4.0 (2025-05-23)
+2.3.0 (2025-10-02)
 ------------------
-* Use CMake targets for eigen (backport `#50 <https://github.com/ros-controls/kinematics_interface/issues/50>`_) (`#55 <https://github.com/ros-controls/kinematics_interface/issues/55>`_)
-* Contributors: mergify[bot]
+* Add backward_ros (`#190 <https://github.com/ros-controls/kinematics_interface/issues/190>`_)
+* Contributors: Christoph Fröhlich
 
-0.3.0 (2024-02-19)
+2.2.0 (2025-08-27)
 ------------------
+* Pass Eigen3 to ament_export_dependencies (`#165 <https://github.com/ros-controls/kinematics_interface/issues/165>`_)
+* Contributors: Silvio Traversaro
 
-0.2.0 (2023-11-16)
+2.1.0 (2025-05-23)
+------------------
+* [kilted] Update deprecated call to ament_target_dependencies (`#138 <https://github.com/ros-controls/kinematics_interface/issues/138>`_)
+* Use ros2_control_cmake (`#118 <https://github.com/ros-controls/kinematics_interface/issues/118>`_)
+* Contributors: Christoph Fröhlich, David V. Lu!!
+
+2.0.0 (2025-03-11)
+------------------
+* Add methods for computing frame differences (`#93 <https://github.com/ros-controls/kinematics_interface/issues/93>`_)
+* Contributors: francesco-donofrio
+
+1.3.0 (2025-03-11)
+------------------
+* Remove visibility boilerplate code (`#101 <https://github.com/ros-controls/kinematics_interface/issues/101>`_)
+* Calculate Jacobian Inverse (`#92 <https://github.com/ros-controls/kinematics_interface/issues/92>`_)
+* Contributors: Christoph Fröhlich, francesco-donofrio
+
+1.2.1 (2024-11-11)
+------------------
+* Remove ns from robot_description parameter (`#91 <https://github.com/ros-controls/kinematics_interface/issues/91>`_)
+* Contributors: Christoph Fröhlich
+
+1.2.0 (2024-11-05)
+------------------
+* API changes to support robot description (`#83 <https://github.com/ros-controls/kinematics_interface/issues/83>`_)
+* Contributors: Dr. Denis
+
+1.1.0 (2024-05-20)
+------------------
+* Read base parameter in initialize function (`#73 <https://github.com/ros-controls/kinematics_interface/issues/73>`_)
+* Use CMake targets for eigen (`#50 <https://github.com/ros-controls/kinematics_interface/issues/50>`_)
+* Contributors: Bence Magyar, Christoph Fröhlich
+
+1.0.0 (2023-11-16)
 ------------------
 * 🤔 Remove compile warnings and unify for-loop syntax. (`#15 <https://github.com/ros-controls/kinematics_interface/issues/15>`_)
 * Contributors: Dr. Denis, Bence Magyar, Paul Gesel

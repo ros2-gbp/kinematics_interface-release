@@ -1,4 +1,4 @@
-// Copyright (c) 2022, PickNik, Inc.
+// Copyright (c) 2024, Saif Sidhik.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-/// \author: Andy Zelenak, Paul Gesel
-/// \description: KDL plugin for kinematics interface
+/// \author: Saif Sidhik
+/// \description: Pinocchio plugin for kinematics interface
 
-#ifndef KINEMATICS_INTERFACE_KDL__KINEMATICS_INTERFACE_KDL_HPP_
-#define KINEMATICS_INTERFACE_KDL__KINEMATICS_INTERFACE_KDL_HPP_
+#ifndef KINEMATICS_INTERFACE_PINOCCHIO__KINEMATICS_INTERFACE_PINOCCHIO_HPP_
+#define KINEMATICS_INTERFACE_PINOCCHIO__KINEMATICS_INTERFACE_PINOCCHIO_HPP_
 
 #include <memory>
 #include <string>
@@ -25,18 +25,18 @@
 
 #include "eigen3/Eigen/Core"
 #include "eigen3/Eigen/LU"
-#include "kdl/chainfksolverpos_recursive.hpp"
-#include "kdl/chainfksolvervel_recursive.hpp"
-#include "kdl/chainjnttojacsolver.hpp"
-#include "kdl/treejnttojacsolver.hpp"
-#include "kdl_parser/kdl_parser.hpp"
 #include "kinematics_interface/kinematics_interface.hpp"
 #include "rclcpp/node_interfaces/node_parameters_interface.hpp"
-#include "tf2_eigen_kdl/tf2_eigen_kdl.hpp"
 
-namespace kinematics_interface_kdl
+#include "pinocchio/algorithm/frames.hpp"
+#include "pinocchio/algorithm/geometry.hpp"
+#include "pinocchio/algorithm/jacobian.hpp"
+#include "pinocchio/algorithm/joint-configuration.hpp"
+#include "pinocchio/parsers/urdf.hpp"
+
+namespace kinematics_interface_pinocchio
 {
-class KinematicsInterfaceKDL : public kinematics_interface::KinematicsInterface
+class KinematicsInterfacePinocchio : public kinematics_interface::KinematicsInterface
 {
 public:
   bool initialize(
@@ -74,26 +74,26 @@ private:
   bool verify_link_name(const std::string & link_name);
   bool verify_joint_vector(const Eigen::VectorXd & joint_vector);
   bool verify_jacobian(const Eigen::Matrix<double, 6, Eigen::Dynamic> & jacobian);
-  bool verify_jacobian_inverse(const Eigen::Matrix<double, Eigen::Dynamic, 6> & jacobian);
+  bool verify_jacobian_inverse(const Eigen::Matrix<double, Eigen::Dynamic, 6> & jacobian_inverse);
   bool verify_period(const double dt);
 
   bool initialized = false;
   std::string root_name_;
-  size_t num_joints_;
-  KDL::Chain chain_;
-  std::shared_ptr<KDL::ChainFkSolverPos_recursive> fk_pos_solver_;
-  KDL::JntArray q_;
-  Eigen::Matrix<KDL::Frame, 2, 1> frames_;
-  KDL::Twist delta_x_;
-  std::shared_ptr<KDL::Jacobian> jacobian_;
-  std::shared_ptr<Eigen::Matrix<double, Eigen::Dynamic, 6>> jacobian_inverse_;
-  std::shared_ptr<KDL::ChainJntToJacSolver> jac_solver_;
+  Eigen::Index num_joints_;
+
+  pinocchio::Model model_;
+  std::shared_ptr<pinocchio::Data> data_;
+  Eigen::VectorXd q_;
+  Eigen::MatrixXd jacobian_;
+  Eigen::Matrix<double, Eigen::Dynamic, 6> jacobian_inverse_;
+  Eigen::MatrixXd frame_tf_;
+
   std::shared_ptr<rclcpp::node_interfaces::NodeParametersInterface> parameters_interface_;
   std::unordered_map<std::string, int> link_name_map_;
   double alpha;  // damping term for Jacobian inverse
   Eigen::MatrixXd I;
 };
 
-}  // namespace kinematics_interface_kdl
+}  // namespace kinematics_interface_pinocchio
 
-#endif  // KINEMATICS_INTERFACE_KDL__KINEMATICS_INTERFACE_KDL_HPP_
+#endif  // KINEMATICS_INTERFACE_PINOCCHIO__KINEMATICS_INTERFACE_PINOCCHIO_HPP_
