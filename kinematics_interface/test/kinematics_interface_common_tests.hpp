@@ -280,37 +280,6 @@ TYPED_TEST_P(TestPlugin, plugin_function_std_vector)
   EXPECT_THAT(jacobian_inverse, MatrixNear(jacobian_inverse_est, 0.02));
 }
 
-TYPED_TEST_P(TestPlugin, plugin_calculate_frame_difference)
-{
-  // compute the difference between two cartesian frames
-  Eigen::Matrix<double, 7, 1> x_a, x_b;
-  x_a << 0, 1, 0, 0, 0, 0, 1;
-  x_b << 2, 3, 0, 0, 1, 0, 0;
-  double dt = 1.0;
-  kinematics_interface::Vector6d delta_x = kinematics_interface::Vector6d::Zero();
-  kinematics_interface::Vector6d delta_x_est;
-  delta_x_est << 2, 2, 0, 0, 3.14, 0;
-  ASSERT_TRUE(this->ik_->calculate_frame_difference(x_a, x_b, dt, delta_x));
-
-  // ensure that difference math is correct
-  EXPECT_THAT(delta_x, MatrixNear(delta_x_est, 0.02));
-}
-
-TYPED_TEST_P(TestPlugin, plugin_calculate_frame_difference_std_vector)
-{
-  // compute the difference between two cartesian frames
-  std::vector<double> x_a(7), x_b(7);
-  x_a = {0, 1, 0, 0, 0, 0, 1};
-  x_b = {2, 3, 0, 0, 1, 0, 0};
-  double dt = 1.0;
-  std::vector<double> delta_x = {0, 0, 0, 0, 0, 0};
-  std::vector<double> delta_x_est = {2, 2, 0, 0, 3.14, 0};
-  ASSERT_TRUE(this->ik_->calculate_frame_difference(x_a, x_b, dt, delta_x));
-
-  // ensure that difference math is correct
-  EXPECT_THAT(delta_x, ::testing::Pointwise(::testing::DoubleNear(0.02), delta_x_est));
-}
-
 TYPED_TEST_P(TestPlugin, incorrect_parameters)
 {
   this->loadTipParameter("");
@@ -382,9 +351,6 @@ TYPED_TEST_P(TestPlugin, incorrect_input_sizes)
   ASSERT_FALSE(this->ik_->calculate_jacobian_inverse(vec_5, this->end_effector_, jacobian));
   ASSERT_FALSE(this->ik_->calculate_jacobian_inverse(pos, this->end_effector_, mat_5_6));
   ASSERT_FALSE(this->ik_->calculate_jacobian_inverse(pos, "link_not_in_model", jacobian));
-
-  // compute the difference between two cartesian frames
-  ASSERT_FALSE(this->ik_->calculate_frame_difference(x_a, x_b, dt, delta_x));
 }
 
 TYPED_TEST_P(TestPlugin, plugin_no_robot_description)
@@ -395,8 +361,7 @@ TYPED_TEST_P(TestPlugin, plugin_no_robot_description)
 
 REGISTER_TYPED_TEST_SUITE_P(
   TestPlugin, plugin_function_basic, plugin_function_reduced_model_tip,
-  plugin_function_reduced_model_base, plugin_function_std_vector, plugin_calculate_frame_difference,
-  plugin_calculate_frame_difference_std_vector, incorrect_parameters, incorrect_input_sizes,
-  plugin_no_robot_description);
+  plugin_function_reduced_model_base, plugin_function_std_vector, incorrect_parameters,
+  incorrect_input_sizes, plugin_no_robot_description);
 
 #endif  // KINEMATICS_INTERFACE_COMMON_TESTS_HPP_

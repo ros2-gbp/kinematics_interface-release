@@ -2,33 +2,28 @@
 Changelog for package kinematics_interface_kdl
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-2.4.0 (2025-12-06)
+1.7.0 (2025-12-06)
 ------------------
-* Add a test template for plugin implementations (`#211 <https://github.com/ros-controls/kinematics_interface/issues/211>`_)
-* Refactor and extend tests (`#210 <https://github.com/ros-controls/kinematics_interface/issues/210>`_)
-* Update maintainers (`#198 <https://github.com/ros-controls/kinematics_interface/issues/198>`_)
-* Contributors: Christoph Fröhlich
+* Add a test template for plugin implementations (backport `#211 <https://github.com/ros-controls/kinematics_interface/issues/211>`_) (`#223 <https://github.com/ros-controls/kinematics_interface/issues/223>`_)
+* Refactor and extend tests (backport `#210 <https://github.com/ros-controls/kinematics_interface/issues/210>`_) (`#219 <https://github.com/ros-controls/kinematics_interface/issues/219>`_)
+* Update maintainers (backport `#198 <https://github.com/ros-controls/kinematics_interface/issues/198>`_) (`#201 <https://github.com/ros-controls/kinematics_interface/issues/201>`_)
+* Contributors: mergify[bot]
 
-2.3.0 (2025-10-02)
+1.6.0 (2025-10-02)
 ------------------
-* Add backward_ros (`#190 <https://github.com/ros-controls/kinematics_interface/issues/190>`_)
-* Contributors: Christoph Fröhlich
+* Add backward_ros (backport `#190 <https://github.com/ros-controls/kinematics_interface/issues/190>`_) (`#193 <https://github.com/ros-controls/kinematics_interface/issues/193>`_)
+* Contributors: mergify[bot]
 
-2.2.0 (2025-08-27)
+1.5.0 (2025-08-27)
 ------------------
-* Pass Eigen3 to ament_export_dependencies (`#165 <https://github.com/ros-controls/kinematics_interface/issues/165>`_)
+* Pass Eigen3 to ament_export_dependencies (backport `#165 <https://github.com/ros-controls/kinematics_interface/issues/165>`_) (`#166 <https://github.com/ros-controls/kinematics_interface/issues/166>`_)
 * Contributors: Silvio Traversaro
 
-2.1.0 (2025-05-23)
+1.4.0 (2025-05-23)
 ------------------
-* [kilted] Update deprecated call to ament_target_dependencies (`#138 <https://github.com/ros-controls/kinematics_interface/issues/138>`_)
-* Use ros2_control_cmake (`#118 <https://github.com/ros-controls/kinematics_interface/issues/118>`_)
-* Contributors: Christoph Fröhlich, David V. Lu!!
-
-2.0.0 (2025-03-11)
-------------------
-* Add methods for computing frame differences (`#93 <https://github.com/ros-controls/kinematics_interface/issues/93>`_)
-* Contributors: francesco-donofrio
+* [kilted] Update deprecated call to ament_target_dependencies (backport `#138 <https://github.com/ros-controls/kinematics_interface/issues/138>`_) (`#142 <https://github.com/ros-controls/kinematics_interface/issues/142>`_)
+* Use ros2_control_cmake (backport `#118 <https://github.com/ros-controls/kinematics_interface/issues/118>`_) (`#119 <https://github.com/ros-controls/kinematics_interface/issues/119>`_)
+* Contributors: mergify[bot]
 
 1.3.0 (2025-03-11)
 ------------------
