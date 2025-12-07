@@ -1,0 +1,12 @@
+Source: ros-kilted-kinematics-interface-pinocchio
+Section: misc
+Priority: optional
+Maintainer: Bence Magyar <bence.magyar.robotics@gmail.com>
+Build-Depends: debhelper (>= 9.0.0), libeigen3-dev, ros-kilted-ament-cmake, ros-kilted-ament-cmake-gmock <!nocheck>, ros-kilted-eigen3-cmake-module, ros-kilted-kinematics-interface, ros-kilted-pinocchio, ros-kilted-pluginlib, ros-kilted-ros2-control-cmake, ros-kilted-ros2-control-test-assets <!nocheck>, ros-kilted-ros-workspace
+Homepage: https://control.ros.org
+Standards-Version: 3.9.2
+
+Package: ros-kilted-kinematics-interface-pinocchio
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libeigen3-dev, ros-kilted-eigen3-cmake-module, ros-kilted-kinematics-interface, ros-kilted-pinocchio, ros-kilted-pluginlib, ros-kilted-ros-workspace
+Description: Pinocchio-based implementation of ros2_control kinematics interface
