@@ -1,0 +1,12 @@
+Source: ros-kilted-kinematics-interface
+Section: misc
+Priority: optional
+Maintainer: Bence Magyar <bence.magyar.robotics@gmail.com>
+Build-Depends: debhelper (>= 9.0.0), libeigen3-dev, ros-kilted-ament-cmake, ros-kilted-ament-cmake-gmock <!nocheck>, ros-kilted-backward-ros, ros-kilted-pluginlib <!nocheck>, ros-kilted-rclcpp-lifecycle, ros-kilted-ros2-control-cmake, ros-kilted-ros2-control-test-assets <!nocheck>, ros-kilted-ros-workspace
+Homepage: https://control.ros.org
+Standards-Version: 3.9.2
+
+Package: ros-kilted-kinematics-interface
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libeigen3-dev, ros-kilted-backward-ros, ros-kilted-rclcpp-lifecycle, ros-kilted-ros-workspace
+Description: Kinematics interface for ROS 2 control
