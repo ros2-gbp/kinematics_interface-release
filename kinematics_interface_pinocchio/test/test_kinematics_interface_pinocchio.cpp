@@ -18,14 +18,18 @@
 
 #include "kinematics_interface_tests/kinematics_interface_common_tests.hpp"
 
-struct PluginKDL
+struct PluginPinocchio
 {
-  static std::string Name() { return "kinematics_interface_kdl/KinematicsInterfaceKDL"; }
+  static std::string Name()
+  {
+    return "kinematics_interface_pinocchio/KinematicsInterfacePinocchio";
+  }
   static void set_custom_node_parameters(rclcpp_lifecycle::LifecycleNode::SharedPtr node)
   {
     node->declare_parameter("alpha", 0.005);
   }
 };
 
-using KinematicsInterfaceKDLTestTypes = ::testing::Types<PluginKDL>;
-INSTANTIATE_TYPED_TEST_SUITE_P(PluginTestKDL, TestPlugin, KinematicsInterfaceKDLTestTypes);
+using KinematicsInterfacePinocchioTestTypes = ::testing::Types<PluginPinocchio>;
+INSTANTIATE_TYPED_TEST_SUITE_P(
+  PluginTestPinocchio, TestPlugin, KinematicsInterfacePinocchioTestTypes);
