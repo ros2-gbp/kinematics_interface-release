@@ -1,1 +1,1 @@
-{"base": "17dae7efb3be", "parent": "debian/rolling/kinematics_interface_pinocchio", "previous": "2cbe8dcd1fda", "trim": "", "trimbase": ""}
+{"base": "7ce37a5", "parent": "debian/lyrical/kinematics_interface_pinocchio", "previous": "17bc598", "trim": "", "trimbase": ""}
