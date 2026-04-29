@@ -1,1 +1,1 @@
-{"base": "d24bcde365ac", "parent": "debian/rolling/kinematics_interface", "previous": "2f309500eb29", "trim": "", "trimbase": ""}
+{"base": "80ed9ba", "parent": "debian/lyrical/kinematics_interface", "previous": "b029426", "trim": "", "trimbase": ""}
