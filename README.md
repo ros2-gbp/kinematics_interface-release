@@ -1,3 +1,29 @@
+## kinematics_interface (jazzy) - 1.7.1-1
+
+The packages in the `kinematics_interface` repository were released into the `jazzy` distro by running `/usr/bin/bloom-release kinematics_interface -r jazzy -y` on `Thu, 14 May 2026 08:46:14 -0000`
+
+These packages were released:
+- `kinematics_interface`
+- `kinematics_interface_kdl`
+- `kinematics_interface_pinocchio`
+
+Version of package(s) in repository `kinematics_interface`:
+
+- upstream repository: https://github.com/ros-controls/kinematics_interface.git
+- release repository: https://github.com/ros2-gbp/kinematics_interface-release.git
+- rosdistro version: `1.7.0-1`
+- old version: `1.7.0-1`
+- new version: `1.7.1-1`
+
+Versions of tools used:
+
+- bloom version: `0.14.3`
+- catkin_pkg version: `1.1.0`
+- rosdep version: `0.26.0`
+- rosdistro version: `1.0.1`
+- vcstools version: `0.1.42`
+
+
 ## kinematics_interface (kilted) - 2.4.2-1
 
 The packages in the `kinematics_interface` repository were released into the `kilted` distro by running `/usr/bin/bloom-release kinematics_interface -r kilted -y` on `Thu, 14 May 2026 08:44:27 -0000`
