@@ -64,6 +64,10 @@ public:
     const Eigen::VectorXd & joint_pos, const std::string & link_name,
     Eigen::Matrix<double, Eigen::Dynamic, 6> & jacobian_inverse) override;
 
+  bool calculate_frame_difference(
+    Eigen::Matrix<double, 7, 1> & x_a, Eigen::Matrix<double, 7, 1> & x_b, double dt,
+    Eigen::Matrix<double, 6, 1> & delta_x) override;
+
 private:
   /// \brief Fill `jacobian_` with the frame Jacobian of `frame_id` expressed in the
   ///        chain-root frame, matching KDL.
